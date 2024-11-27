@@ -13,4 +13,4 @@ class TestCleaningRobot(TestCase):
         sut.initialize_robot()
         self.assertEqual(0, sut.pos_x)
         self.assertEqual(0, sut.pos_y)
-        self.assertEqual('N', sut.heading)
+        self.assertEqual(sut.N, sut.heading)
