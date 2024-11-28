@@ -83,5 +83,16 @@ class TestCleaningRobot(TestCase):
         self.assertEqual("(0,0,E)", status)
         mock_activate_rotation_motor.assert_called_once_with(sut.RIGHT)
 
+    @patch.object(GPIO, "input")
+    def test_obstacle_found_positive(self, mock_infrared_sensor: Mock):
+        sut = CleaningRobot()
+        mock_infrared_sensor.return_value = True
+        self.assertTrue(sut.obstacle_found())
 
+    
+    @patch.object(GPIO, "input")
+    def test_obstacle_found_negative(self, mock_infrared_sensor: Mock):
+        sut = CleaningRobot()
+        mock_infrared_sensor.return_value = False
+        self.assertFalse(sut.obstacle_found())
 
