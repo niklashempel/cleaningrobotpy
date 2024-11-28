@@ -45,5 +45,40 @@ class TestCleaningRobot(TestCase):
         output_calls =[call(sut.CLEANING_SYSTEM_PIN, False), call(sut.RECHARGE_LED_PIN, True)]
         mock_gpio.assert_has_calls(output_calls)
 
-    
+    @patch.object(CleaningRobot, 'activate_wheel_motor')
+    def test_execute_command_move(self, mock_activate_wheel_motor: Mock):
+        sut = CleaningRobot()
+        sut.initialize_robot()
+
+        sut.execute_command(sut.FORWARD)
+        self.assertEqual(0, sut.pos_x)
+        self.assertEqual(1, sut.pos_y)
+        self.assertEqual(sut.N, sut.heading)
+
+        mock_activate_wheel_motor.assert_called_once()
+
+    @patch.object(CleaningRobot, 'activate_rotation_motor')
+    def test_execute_command_turn_left(self, mock_activate_rotation_motor: Mock):
+        sut = CleaningRobot()
+        sut.initialize_robot()
+
+        sut.execute_command(sut.LEFT)
+        self.assertEqual(0, sut.pos_x)
+        self.assertEqual(0, sut.pos_y)
+        self.assertEqual(sut.W, sut.heading)
+
+        mock_activate_rotation_motor.assert_called_once_with(sut.LEFT)
+
+    @patch.object(CleaningRobot, 'activate_rotation_motor')
+    def test_execute_command_turn_right(self, mock_activate_rotation_motor: Mock):
+        sut = CleaningRobot()
+        sut.initialize_robot()
+
+        sut.execute_command(sut.RIGHT)
+        self.assertEqual(0, sut.pos_x)
+        self.assertEqual(0, sut.pos_y)
+        self.assertEqual(sut.E, sut.heading)
+        mock_activate_rotation_motor.assert_called_once_with(sut.RIGHT)
+
+
 
