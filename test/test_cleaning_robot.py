@@ -46,7 +46,9 @@ class TestCleaningRobot(TestCase):
         mock_gpio.assert_has_calls(output_calls)
 
     @patch.object(CleaningRobot, 'activate_wheel_motor')
-    def test_execute_command_move(self, mock_activate_wheel_motor: Mock):
+    @patch.object(CleaningRobot, "obstacle_found")
+    def test_execute_command_move(self, mock_obstacle_found: Mock, mock_activate_wheel_motor: Mock):
+        mock_obstacle_found.return_value = False        
         sut = CleaningRobot()
         sut.initialize_robot()
 
@@ -59,7 +61,9 @@ class TestCleaningRobot(TestCase):
         mock_activate_wheel_motor.assert_called_once()
 
     @patch.object(CleaningRobot, 'activate_rotation_motor')
-    def test_execute_command_turn_left(self, mock_activate_rotation_motor: Mock):
+    @patch.object(CleaningRobot, "obstacle_found")
+    def test_execute_command_turn_left(self, mock_obstacle_found: Mock, mock_activate_rotation_motor: Mock):
+        mock_obstacle_found.return_value = False        
         sut = CleaningRobot()
         sut.initialize_robot()
 
@@ -72,7 +76,9 @@ class TestCleaningRobot(TestCase):
         mock_activate_rotation_motor.assert_called_once_with(sut.LEFT)
 
     @patch.object(CleaningRobot, 'activate_rotation_motor')
-    def test_execute_command_turn_right(self, mock_activate_rotation_motor: Mock):
+    @patch.object(CleaningRobot, "obstacle_found")
+    def test_execute_command_turn_right(self,mock_obstacle_found: Mock,  mock_activate_rotation_motor: Mock):
+        mock_obstacle_found.return_value = False        
         sut = CleaningRobot()
         sut.initialize_robot()
 
@@ -96,3 +102,16 @@ class TestCleaningRobot(TestCase):
         mock_infrared_sensor.return_value = False
         self.assertFalse(sut.obstacle_found())
 
+    
+    @patch.object(CleaningRobot, 'activate_wheel_motor')
+    @patch.object(CleaningRobot, "obstacle_found")
+    def test_execute_command_move_when_obstacle_found(self, mock_obstacle_found: Mock, mock_activate_wheel_motor: Mock):
+        mock_obstacle_found.return_value = True        
+        sut = CleaningRobot()
+        sut.initialize_robot()
+
+        status = sut.execute_command(sut.FORWARD)
+        self.assertEqual(0, sut.pos_x)
+        self.assertEqual(0, sut.pos_y)
+        self.assertEqual(sut.N, sut.heading)
+        self.assertEqual("(0,0,N)(0,1)", status)
