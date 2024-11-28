@@ -73,6 +73,11 @@ class CleaningRobot:
         return f"({self.pos_x},{self.pos_y},{self.heading})"
 
     def execute_command(self, command: str) -> str:
+        battery = self.ibs.get_charge_left()
+        if battery <= 10:
+            self.manage_cleaning_system()
+            return f"!{self.robot_status()}"
+
         obstacle_found = self.obstacle_found()
         if obstacle_found:
             obstacle_x = self.pos_x + 1 if self.heading == self.E else self.pos_x - 1 if self.heading == self.W else self.pos_x
