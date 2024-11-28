@@ -84,6 +84,7 @@ class CleaningRobot:
             self.heading = self.E
         else:
             raise CleaningRobotError(f"Invalid command: {command}")
+        return self.robot_status()
 
     def obstacle_found(self) -> bool:
         # To be implemented

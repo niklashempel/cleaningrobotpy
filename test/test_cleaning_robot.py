@@ -50,10 +50,11 @@ class TestCleaningRobot(TestCase):
         sut = CleaningRobot()
         sut.initialize_robot()
 
-        sut.execute_command(sut.FORWARD)
+        status = sut.execute_command(sut.FORWARD)
         self.assertEqual(0, sut.pos_x)
         self.assertEqual(1, sut.pos_y)
         self.assertEqual(sut.N, sut.heading)
+        self.assertEqual("(0,1,N)", status)
 
         mock_activate_wheel_motor.assert_called_once()
 
@@ -62,10 +63,11 @@ class TestCleaningRobot(TestCase):
         sut = CleaningRobot()
         sut.initialize_robot()
 
-        sut.execute_command(sut.LEFT)
+        status = sut.execute_command(sut.LEFT)
         self.assertEqual(0, sut.pos_x)
         self.assertEqual(0, sut.pos_y)
         self.assertEqual(sut.W, sut.heading)
+        self.assertEqual("(0,0,W)", status)
 
         mock_activate_rotation_motor.assert_called_once_with(sut.LEFT)
 
@@ -74,10 +76,11 @@ class TestCleaningRobot(TestCase):
         sut = CleaningRobot()
         sut.initialize_robot()
 
-        sut.execute_command(sut.RIGHT)
+        status = sut.execute_command(sut.RIGHT)
         self.assertEqual(0, sut.pos_x)
         self.assertEqual(0, sut.pos_y)
         self.assertEqual(sut.E, sut.heading)
+        self.assertEqual("(0,0,E)", status)
         mock_activate_rotation_motor.assert_called_once_with(sut.RIGHT)
 
 
