@@ -110,3 +110,17 @@ class TestCleaningRobot(TestCase):
         self.assertEqual(sut.N, sut.heading)
         self.assertEqual("(0,0,N)(0,1)", status)
         mock_activate_wheel_motor.assert_not_called()
+
+    @patch.object(IBS, 'get_charge_left')
+    @patch.object(GPIO, 'output')
+    def test_execute_command_when_not_enough_charge(self, mock_gpio: Mock, mock_get_charge_left: Mock):
+        mock_get_charge_left.return_value = 10
+        sut = CleaningRobot()
+        sut.initialize_robot()
+        status = sut.execute_command(sut.FORWARD)
+
+        calls = [call(sut.CLEANING_SYSTEM_PIN, False), call(sut.RECHARGE_LED_PIN, True)]
+        mock_gpio.assert_has_calls(calls)
+        self.assertFalse(sut.cleaning_system_on)
+        self.assertTrue(sut.recharge_led_on)
+        self.assertEqual("!(0,0,N)", status)
