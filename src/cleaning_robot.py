@@ -17,6 +17,7 @@ class CleaningRobot:
 
     RECHARGE_LED_PIN = 12
     CLEANING_SYSTEM_PIN = 13
+    WATER_TANK_PIN = 14
     INFRARED_PIN = 15
 
     # Wheel motor pins
@@ -44,6 +45,7 @@ class CleaningRobot:
         GPIO.setwarnings(False)
         GPIO.setup(self.INFRARED_PIN, GPIO.IN)
         GPIO.setup(self.RECHARGE_LED_PIN, GPIO.OUT)
+        GPIO.setup(self.WATER_TANK_PIN, GPIO.OUT)
         GPIO.setup(self.CLEANING_SYSTEM_PIN, GPIO.OUT)
 
         GPIO.setup(self.PWMA, GPIO.OUT)
@@ -159,6 +161,9 @@ class CleaningRobot:
         GPIO.output(self.BIN2, GPIO.LOW)
         GPIO.output(self.PWMB, GPIO.LOW)
         GPIO.output(self.STBY, GPIO.LOW)
+
+    def enough_water(self) -> bool:
+        return GPIO.input(self.WATER_TANK_PIN)
 
 
 class CleaningRobotError(Exception):

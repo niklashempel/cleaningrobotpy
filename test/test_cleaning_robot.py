@@ -140,7 +140,7 @@ class TestCleaningRobot(TestCase):
         self.assertTrue(sut.enough_water())
 
     @patch.object(GPIO, "input")
-    def not_test_enough_water(self, mock_water_sensor: Mock):
+    def test_not_enough_water(self, mock_water_sensor: Mock):
         mock_water_sensor.return_value = False
         sut = CleaningRobot()
         self.assertFalse(sut.enough_water())
