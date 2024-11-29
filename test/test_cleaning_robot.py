@@ -144,3 +144,13 @@ class TestCleaningRobot(TestCase):
         mock_water_sensor.return_value = False
         sut = CleaningRobot()
         self.assertFalse(sut.enough_water())
+
+    @patch.object(CleaningRobot, 'enough_water')
+    @patch.object(IBS, 'get_charge_left')
+    def test_execute_command_not_enough_water(self, mock_get_charge_left: Mock, mock_enough_water: Mock):
+        mock_enough_water.return_value = False
+        mock_get_charge_left.return_value = 100
+        sut = CleaningRobot()
+        sut.initialize_robot()
+        status = sut.execute_command(sut.FORWARD)
+        self.assertEqual("?(0,1,N)", status)
