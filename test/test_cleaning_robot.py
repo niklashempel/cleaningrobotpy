@@ -132,3 +132,15 @@ class TestCleaningRobot(TestCase):
         self.assertFalse(sut.cleaning_system_on)
         self.assertTrue(sut.recharge_led_on)
         self.assertEqual("!(0,0,N)", status)
+
+    @patch.object(GPIO, "input")
+    def test_enough_water(self, mock_water_sensor: Mock):
+        mock_water_sensor.return_value = True
+        sut = CleaningRobot()
+        self.assertTrue(sut.enough_water())
+
+    @patch.object(GPIO, "input")
+    def not_test_enough_water(self, mock_water_sensor: Mock):
+        mock_water_sensor.return_value = False
+        sut = CleaningRobot()
+        self.assertFalse(sut.enough_water())
