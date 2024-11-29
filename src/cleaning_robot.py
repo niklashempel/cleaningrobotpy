@@ -75,7 +75,10 @@ class CleaningRobot:
     def execute_command(self, command: str) -> str:
         battery = self.ibs.get_charge_left()
         if battery <= 10:
-            self.manage_cleaning_system()
+            self.cleaning_system_on = False
+            self.recharge_led_on = True
+            GPIO.output(self.CLEANING_SYSTEM_PIN, False)
+            GPIO.output(self.RECHARGE_LED_PIN, True)
             return f"!{self.robot_status()}"
 
         obstacle_found = self.obstacle_found()
