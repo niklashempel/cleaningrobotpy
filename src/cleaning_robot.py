@@ -82,7 +82,7 @@ class CleaningRobot:
             GPIO.output(self.CLEANING_SYSTEM_PIN, False)
             GPIO.output(self.RECHARGE_LED_PIN, True)
             return f"!{self.robot_status()}"
-
+        
         obstacle_found = self.obstacle_found()
         if obstacle_found:
             obstacle_x = self.pos_x + 1 if self.heading == self.E else self.pos_x - 1 if self.heading == self.W else self.pos_x
@@ -99,7 +99,10 @@ class CleaningRobot:
             self.heading = self.E
         else:
             raise CleaningRobotError(f"Invalid command: {command}")
-        return self.robot_status()
+        
+        water_available = self.enough_water()
+
+        return self.robot_status() if water_available else f"?{self.robot_status()}"
 
     def obstacle_found(self) -> bool:
         return GPIO.input(self.INFRARED_PIN)

@@ -47,8 +47,10 @@ class TestCleaningRobot(TestCase):
 
     @patch.object(CleaningRobot, 'activate_wheel_motor')
     @patch.object(IBS, 'get_charge_left')
-    def test_execute_command_move(self, mock_get_charge_left: Mock, mock_activate_wheel_motor: Mock):
+    @patch.object(CleaningRobot, "enough_water")
+    def test_execute_command_move(self, mock_enough_water: Mock, mock_get_charge_left: Mock, mock_activate_wheel_motor: Mock):
         mock_get_charge_left.return_value = 100
+        mock_enough_water.return_value = True
         sut = CleaningRobot()
         sut.initialize_robot()
 
@@ -62,8 +64,10 @@ class TestCleaningRobot(TestCase):
 
     @patch.object(CleaningRobot, 'activate_rotation_motor')
     @patch.object(IBS, 'get_charge_left')
-    def test_execute_command_turn_left(self, mock_get_charge_left: Mock, mock_activate_rotation_motor: Mock):
+    @patch.object(CleaningRobot, "enough_water")
+    def test_execute_command_turn_left(self, mock_enough_water: Mock, mock_get_charge_left: Mock, mock_activate_rotation_motor: Mock):
         mock_get_charge_left.return_value = 100
+        mock_enough_water.return_value = True
         sut = CleaningRobot()
         sut.initialize_robot()
 
@@ -77,8 +81,10 @@ class TestCleaningRobot(TestCase):
 
     @patch.object(CleaningRobot, 'activate_rotation_motor')
     @patch.object(IBS, 'get_charge_left')
-    def test_execute_command_turn_right(self, mock_get_charge_left: Mock, mock_activate_rotation_motor: Mock):
+    @patch.object(CleaningRobot, "enough_water")
+    def test_execute_command_turn_right(self, mock_enough_water: Mock, mock_get_charge_left: Mock, mock_activate_rotation_motor: Mock):
         mock_get_charge_left.return_value = 100
+        mock_enough_water.return_value = True
         sut = CleaningRobot()
         sut.initialize_robot()
 
